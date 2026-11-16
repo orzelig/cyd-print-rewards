@@ -1,0 +1,5 @@
+# Wokwi emulator config. Build first with: pio run -e wokwi
+[wokwi]
+version = 1
+firmware = '.pio/build/wokwi/merged.bin'
+elf = '.pio/build/wokwi/firmware.elf'

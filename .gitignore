@@ -1,0 +1,12 @@
+.pio/
+.vscode/
+*.elf
+*.bin
+__pycache__/
+*.pyc
+.venv/
+.DS_Store
+# Amazon sign-in and kid ids: never commit
+cookie.txt
+children.tsv
+*.cookies
