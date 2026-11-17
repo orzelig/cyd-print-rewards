@@ -132,12 +132,18 @@ def main(argv=None) -> int:
               "If the dashboard is showing and nothing happens, press Enter here.", flush=True)
         deadline = time.monotonic() + args.timeout_min * 60
         last_nudge = 0.0
+        steady = 0
         while time.monotonic() < deadline:
             if any(signed_in(pg) for pg in ctx.pages):
                 break
             on_dashboard = any(pg.url.startswith(rr.BASE) for pg in ctx.pages)
             if on_dashboard and watcher.kids:
                 break  # the page loaded the household over the network instead of embedding it
+            # Still on the activity page 10 s later with a sign-in cookie: Amazon didn't send it to sign-in.
+            on_activity = any(pg.url.startswith(rr.BASE + "/activities/household-summary") for pg in ctx.pages)
+            steady = steady + 1 if on_activity and any(c["name"] == "at-main" for c in ctx.cookies()) else 0
+            if steady >= 5:
+                break
             if enter_pressed():
                 if on_dashboard:
                     break
